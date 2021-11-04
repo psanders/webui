@@ -1,13 +1,9 @@
 import Users from "@fonoster/users";
 import Auth from "@fonoster/auth";
 
-const credentials = {
-  accessKeyId: process.env.ACCESS_KEY_ID,
-  accessKeySecret: process.env.ACCESS_KEY_SECRET
-}
-
-const users = new Users(credentials);
-const auth = new Auth(credentials);
+// Will take the credentials and API endpoint from the environment
+const users = new Users();
+const auth = new Auth();
 
 export async function userExist(email) {
   return await getUser(email) !== null
@@ -45,4 +41,8 @@ export async function createToken(accessKeyId) {
     expirantion: "30d"
   })
   return response.token;
+}
+
+export async function hasAccess(email) {
+  
 }

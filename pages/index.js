@@ -1,26 +1,27 @@
 import React from "react";
 import Image from "next/image";
 import { useSession, signIn, signOut } from "next-auth/client";
-import { Badge, Typography, Card, Button, Input } from "@supabase/ui";
+import { Alert, Badge, Typography, Card, Button, Input } from "@supabase/ui";
 import Link from 'next/link'
+import Meta from '../components/Favicons'
 
 export default function Home() {
   const [session] = useSession();
 
   return (
     <div className='dark'>
-      <Image alt="Fonoster Logo" width="150px" height="40px" src="/logo-dark.svg" />
+      <Meta />
+      <div style={{position: "relative", marginLeft: -10, marginBottom: 10}} >
+        <Image alt="Fonoster Logo" width="150px" height="40px" src="/logo-dark.svg" />
+      </div>
       <div className="bg-white dark:bg-gray-800">
-
-        <br />
         {!session ? (
           <>
             <div style={{width: "450px"}}> 
+              <Badge dot>Open to Github Sponsors</Badge>
               <Typography.Title level={2}>
                 Ready to engage your clients better, faster?
               </Typography.Title>
-              <Badge dot>Available for Individual Github Sponsors</Badge>
-              <br/> <br/>
               <Typography.Title level={4} type="secondary">
                 <span style={{ color: '#bbbbbb' }}>
                   Create a smart voice applications that meets your business needs
@@ -28,6 +29,7 @@ export default function Home() {
                   burdensome customizations.
                 </span>
               </Typography.Title>
+              <br />
               <Button onClick={() => signIn("github")}>
                 Sign in with Github
               </Button> <Link 
@@ -39,7 +41,11 @@ export default function Home() {
           </>
         ) : (
           <>
+  
             <Card style={{ width: "450px" }} title={`${session.user.name} -  ${session.user.email}`}>
+            <Alert title="Sponsors only private beta" withIcon red>
+     This is a sponsors only private beta. You must
+    </Alert>
               <Input label="Access Key Id" value={session.user.accessKeyId} copy />
               <br />
               <Input label="Access Key Secret" value={session.user.accessKeySecret} reveal copy />

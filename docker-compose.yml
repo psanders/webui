@@ -1,0 +1,29 @@
+version: '3.3'
+
+networks:
+  fonoster:
+
+services:
+  webui:
+    build:
+      context: .  
+    image: fonoster/webui:latest
+    # Be sure to remove this while in production 
+    ports:
+      - 8443:3000
+    environment:
+      - ENDPOINT
+      - NEXTJS_URL
+      - GITHUB_CLIENT_ID
+      - GITHUB_CLIENT_SECRET
+      - AUTH_SECRET
+      - JWT_SECRET
+      - ACCESS_KEY_ID
+      - ACCESS_KEY_SECRET
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.webui.entrypoints=websecure"
+      - "traefik.http.services.webui.loadbalancer.server.port=3000"
+      - "traefik.http.routers.webui.rule=PathPrefix(`/webui`)"    
+    volumes:
+      - ${CONFIG}/config:/home/fonoster/.fonoster/config
