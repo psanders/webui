@@ -8,6 +8,23 @@ import {
   createUser, 
   createToken 
 } from "../../../utils";
+import fetch from 'node-fetch'
+
+async function getEmail(account) {
+  // https://developer.github.com/v3/users/emails/#list-email-addresses-for-the-authenticated-user
+  const res = await fetch('https://api.github.com/user/emails', {
+    headers: {
+      'Authorization': `token ${account.accessToken}`
+    }
+  })
+  const emails = await res.json()
+  if (!emails || emails.length === 0) {
+    return
+  }
+  // Sort by primary email - the user may have several emails, but only one of them will be primary
+  const sortedEmails = emails.sort((a, b) => b.primary - a.primary)
+  return sortedEmails[0].email
+}
 
 export default (req, res) =>
   NextAuth(req, res, {
@@ -27,11 +44,11 @@ export default (req, res) =>
       async redirect(url, baseUrl) {
         return "/";
       },
-      async signIn({ user, account, profile, email, credentials }) {
-        if (!(await userExist(email))) {
-          console.log("creating user")
+      async signIn(profile, account) {
+        const _email = await getEmail(account);
+        if (!(await userExist(_email))) {
           await createUser({
-            email,
+            _email,
             name: "xxx",
             // TODO: Make this truly random
             secret: "random"
@@ -40,6 +57,7 @@ export default (req, res) =>
         return true;
       },
       async session(session) {
+        console.log("session -> " + JSON.stringify(session));
         const user = await getUser(session.user.email);
         session.user.accessKeyId = user.accessKeyId;
         session.user.accessKeySecret = await createToken(user.accessKeyId);
