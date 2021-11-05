@@ -1,4 +1,4 @@
-version: '3.3'
+version: '3.7'
 
 networks:
   fonoster:
@@ -12,6 +12,7 @@ services:
     ports:
       - 8443:3000
     environment:
+      - ALLOW_INSECURE
       - ENDPOINT
       - NEXTJS_URL
       - GITHUB_CLIENT_ID
@@ -24,6 +25,8 @@ services:
       - "traefik.enable=true"
       - "traefik.http.routers.webui.entrypoints=websecure"
       - "traefik.http.services.webui.loadbalancer.server.port=3000"
-      - "traefik.http.routers.webui.rule=PathPrefix(`/webui`)"    
+      - "traefik.http.routers.webui.rule=PathPrefix(`/webui`)"
+    networks:
+      - fonoster
     volumes:
       - ${CONFIG}/config:/home/fonoster/.fonoster/config
