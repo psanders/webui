@@ -46,9 +46,9 @@ export default (req, res) =>
       },
       async signIn(profile, account) {
         const _email = await getEmail(account);
-        if (!(await userExist(_email))) {
+        if (!await userExist(_email)) {
           await createUser({
-            _email,
+            email: _email,
             name: "xxx",
             // TODO: Make this truly random
             secret: "random"
@@ -57,7 +57,6 @@ export default (req, res) =>
         return true;
       },
       async session(session) {
-        console.log("session -> " + JSON.stringify(session));
         const user = await getUser(session.user.email);
         session.user.accessKeyId = user.accessKeyId;
         session.user.accessKeySecret = await createToken(user.accessKeyId);
