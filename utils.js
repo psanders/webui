@@ -6,7 +6,7 @@ const users = new Users();
 const auth = new Auth();
 
 export async function userExist(email) {
-  return await getUser(email) !== null
+  return await getUser(email) != null
 }
 
 export async function createUser(user) {
@@ -41,7 +41,4 @@ export async function createToken(accessKeyId) {
     expirantion: "30d"
   })
   return response.token;
-}
-
-export async function hasAccess(email) { 
 }
