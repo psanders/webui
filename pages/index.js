@@ -1,7 +1,7 @@
 import React from "react";
 import Image from "next/image";
 import { useSession, signIn, signOut } from "next-auth/client";
-import { Alert, Badge, Typography, Card, Button, Input } from "@supabase/ui";
+import { Badge, Typography, Card, Button, Input } from "@supabase/ui";
 import Link from 'next/link'
 import Meta from '../components/Favicons'
 
@@ -41,11 +41,7 @@ export default function Home() {
           </>
         ) : (
           <>
-  
             <Card style={{ width: "450px" }} title={`${session.user.name} -  ${session.user.email}`}>
-            <Alert title="Sponsors only private beta" withIcon red>
-     This is a sponsors only private beta. You must
-    </Alert>
               <Input label="Access Key Id" value={session.user.accessKeyId} copy />
               <br />
               <Input label="Access Key Secret" value={session.user.accessKeySecret} reveal copy />

@@ -1,11 +1,16 @@
 {
   "name": "webui",
+  "version": "0.2.15",
   "private": true,
   "scripts": {
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
     "lint": "next lint"
+  },
+  "bin": {
+    "run": "./run.sh",
+    "healthcheck": "./healthcheck.js"
   },
   "dependencies": {
     "@fonoster/auth": "^0.2.16",

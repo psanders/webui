@@ -21,7 +21,7 @@ export async function getUser(email) {
   try {
     // TODO: Fix not using email as a filter
     const list = await users.listUsers({});
-    const l = list.users.map(user => {
+    const l = list.users.filter(user => {
       if (user.email === email) {
         return user
       }
@@ -43,6 +43,5 @@ export async function createToken(accessKeyId) {
   return response.token;
 }
 
-export async function hasAccess(email) {
-  
+export async function hasAccess(email) { 
 }
