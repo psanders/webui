@@ -1,5 +1,4 @@
 /* eslint-disable import/no-anonymous-default-export */
-// pages/api/auth/[...nextauth].js
 import NextAuth from "next-auth";
 import Providers from "next-auth/providers";
 import { 
@@ -9,6 +8,7 @@ import {
   createToken 
 } from "../../../utils";
 import fetch from 'node-fetch'
+import logger from '@fonoster/logger'
 
 async function getEmail(account) {
   // https://developer.github.com/v3/users/emails/#list-email-addresses-for-the-authenticated-user
@@ -45,22 +45,36 @@ export default (req, res) =>
         return "/";
       },
       async signIn(profile, account) {
+        logger.verbose(`webui signIn [profile -> ${JSON.stringify(profile)}]`)
+        logger.verbose(`webui signIn [account -> ${JSON.stringify(account)}]`)
         const _email = await getEmail(account);
         if (!await userExist(_email)) {
           await createUser({
             email: _email,
-            name: "xxx",
-            // TODO: Make this truly random
-            secret: "random"
+            name: profile.name,
+            // Setting this to a secured value but we won't
+            // support username/password for now
+            secret: account.accessToken
           })
         }
         return true;
       },
-      async session(session) {
-        const user = await getUser(session.user.email);
+      async session(session, token) {
+        logger.verbose(`webui session [session -> ${JSON.stringify(session)}]`)
+        logger.verbose(`webui session [token -> ${JSON.stringify(token)}]`)
+        const _email = await getEmail(token.account);
+        const user = await getUser(_email);
         session.user.accessKeyId = user.accessKeyId;
         session.user.accessKeySecret = await createToken(user.accessKeyId);
         return session
-      }
+      },
+      async jwt(token, user, account) {
+        logger.verbose(`webui jwt [session -> ${JSON.stringify(token)}]`)
+        logger.verbose(`webui jwt [token -> ${JSON.stringify(user)}]`)
+        logger.verbose(`webui jwt [account -> ${JSON.stringify(account)}]`)
+        user && (token.user = user);
+        account && (token.account = account);
+        return token
+      },
     },
   });
