@@ -42,6 +42,8 @@ export default function Home() {
         ) : (
           <>
             <Card style={{ width: "450px" }} title={`${session.user.name}`}>
+              <Input label="Endpoint" value={session.endpoint} copy />
+              <br />
               <Input label="Access Key Id" value={session.user.accessKeyId} copy />
               <br />
               <Input label="Access Key Secret" value={session.user.accessKeySecret} reveal copy />

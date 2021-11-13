@@ -64,6 +64,7 @@ export default (req, res) =>
         logger.verbose(`webui session [token -> ${JSON.stringify(token)}]`)
         const _email = await getEmail(token.account);
         const user = await getUser(_email);
+        session.endpoint = process.env.ENDPOINT;
         session.user.accessKeyId = user.accessKeyId;
         session.user.accessKeySecret = await createToken(user.accessKeyId);
         return session
