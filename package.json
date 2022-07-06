@@ -20,7 +20,7 @@
     "@supabase/ui": "^0.35.0",
     "autoprefixer": "^10.3.7",
     "next": "12.0.2",
-    "next-auth": "^3.29.0",
+    "next-auth": "^3.29.8",
     "node-fetch": "^2.6.6",
     "postcss": "^8.3.11",
     "postcss-preset-env": "^6.7.0",
